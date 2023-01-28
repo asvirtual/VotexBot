@@ -42,7 +42,7 @@ const prettifyDate = date => String(date).length === 1 ? `0${date}` : date;
 const getPollExpirationMessage = poll => {
     const createdAt = new Date(poll.createdAt);
     const expiration = new Date(createdAt.getTime() + poll.expirationHours * 1000 * 60 * 60 + poll.expirationMinutes * 1000 * 60);
-    return `Created: ${createdAt.getMonth()}/${createdAt.getDate()}/${createdAt.getFullYear()} - ${prettifyDate(createdAt.getHours())}:${prettifyDate(createdAt.getMinutes())} GMT\nExpires: ${expiration.getMonth()}/${expiration.getDate()}/${expiration.getFullYear()} - ${prettifyDate(expiration.getHours())}:${prettifyDate(expiration.getMinutes())} GMT`;
+    return `Created: ${createdAt.getMonth()+1}/${createdAt.getDate()}/${createdAt.getFullYear()} - ${prettifyDate(createdAt.getHours())}:${prettifyDate(createdAt.getMinutes())} GMT\nExpires: ${expiration.getMonth()+1}/${expiration.getDate()}/${expiration.getFullYear()} - ${prettifyDate(expiration.getHours())}:${prettifyDate(expiration.getMinutes())} GMT`;
 };
 const getPollMessage = async poll => await (client.guilds.cache.get(poll.guildId).channels.cache.get(poll.channelId).messages).fetch(poll.messageId);
 const getPremiumMember = async id => premiumMembers = (await admin.database().ref(`premiumMembers/${id}`).get()).val();
