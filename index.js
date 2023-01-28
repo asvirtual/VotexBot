@@ -255,8 +255,12 @@ const pollEndEmbed = async poll => {
             timestamp: (new Date()).toISOString(),
         };
 
-    const message = await getPollMessage(poll);
-    await message.edit({ embeds: [embed], components: [] });
+    try {
+        const message = await getPollMessage(poll);
+        await message.edit({ embeds: [embed], components: [] });
+    } catch (err) {
+        console.warn(`Error deleting message for poll ${JSON.stringify(poll)}: ${err}`);
+    }
     delete polls[message.guildId][poll.authorId];
     savePolls();
 }
@@ -388,7 +392,11 @@ client.on('interactionCreate', async interaction => {
                     },
                 }
 
-                await (await getPollMessage(polls[interaction.guildId][interaction.member.id])).edit({ embeds: [embed] });
+                try {
+                    await (await getPollMessage(polls[interaction.guildId][interaction.member.id])).edit({ embeds: [embed] });
+                } catch (err) {
+                    console.warn(`Error trying to edit embed for poll ${JSON.stringify(polls[interaction.guildId][interaction.member.id])}: ${err}`);
+                }
 
                 await interaction.deferReply();
                 await interaction.deleteReply();
