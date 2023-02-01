@@ -261,7 +261,8 @@ const pollEndEmbed = async poll => {
     } catch (err) {
         console.warn(`Error deleting message for poll ${JSON.stringify(poll)}: ${err}`);
     }
-    delete polls[message.guildId][poll.authorId];
+
+    delete polls[String(poll.guildId)][String(poll.authorId)];
     savePolls();
 }
 
