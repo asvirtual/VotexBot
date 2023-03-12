@@ -275,32 +275,32 @@ client.on('interactionCreate', async interaction => {
                 embed = {
                     color: DEFAULT_EMBED_COLOR,
                     title: "Votex manual",
-                    description: 'Votex is a bot that allows for voting. The admins can choose the weight of each role\'s vote using the / commands.\nThe Lite version of Votex differs from the Premium version in that it only allows for 4 weighted roles and only 4 polls per week. The Premium version has no limits on the number of roles and polls, and allows for the creation of custom embeds with images, titles, and colors. To unlock the Premium version, you can purchase an NFT from the Votex collection, join the ZKN LBS server, and request a Premium code, which will be automatically issued to you as a holder (Premium subscription will be valid for one year).\nIt was created by <@527862257221369871> (Asvirtual#2503) for [NGC DAO](https://discord.gg/dgRkxagXe6) & [ZKN LBS](https://discord.gg/5z2np6avum).\nHere is the list of available commands:',
+                    description: '**Votex** is a bot that allows for *voting*. The admins can choose the weight of each role\'s vote using the / commands.\nThe Lite version of Votex differs from the Premium version in that it only allows for 4 weighted roles and only 4 polls per week. The Premium version has no limits on the number of roles and polls, and allows for the creation of custom embeds with images, titles, and colors. To unlock the Premium version, you can purchase an NFT from the Votex collection, join the ZKN LBS server, and request a Premium code, which will be automatically issued to you as a holder (Premium subscription will be valid for one year).\nIt was created by <@527862257221369871> (*Asvirtual#2503*) for **[NGC DAO](https://discord.gg/dgRkxagXe6)** & **[ZKN LBS](https://discord.gg/5z2np6avum)**.\nHere is the list of available commands:',
                     timestamp: (new Date()).toISOString(),
                     fields: [
                         {
-                            name: '/poll',
-                            value: 'Start a new poll.\n\nRequired parameters are:\n - Question: The topic to be discussed.\n - Answers: The list of possible answers to your question, separated by a comma ","\n - Expiration: The expiration time for the poll, passed with the following format: [hh:mm] (Hours and minutes separated by columns ":")'
+                            name: '**/poll**',
+                            value: 'Start a new poll.\n\n*Required parameters are*:\n - Question: The topic to be discussed.\n - Answers: The list of possible answers to your question, separated by a comma ","\n - Expiration: The expiration time for the poll, passed with the following format: [hh:mm] (Hours and minutes separated by columns ":")'
                         },
                         {
-                            name: '/stop',
+                            name: '**/stop**',
                             value: 'Stops the current poll, without waiting for the expiration time'
                         },
                         {
-                            name: '/cancel',
+                            name: '**/cancel**',
                             value: 'Cancels the current poll'
                         },
                         {
-                            name: '/role',
-                            value: 'Sets the preference for a specified role.\n\nRequired parameters are:\n - Role: The mention to the role you want to edit.\n - Allowed: Wheter the role is allowed to vote.\n\nOptional parameters are:\n - Multiplier: the multiplier assigned to that role.\n\nIf no roles are specified, @everyone is allowed to vote and the multiplier is set to 1.\n\nIf some role are specified, only specified roles with allowed set to "True" are allowed to vote. Unspecified roles will not be allowed to vote.'
+                            name: '**/role**',
+                            value: 'Sets the preference for a specified role.\n\n*Required parameters are*:\n - Role: The mention to the role you want to edit.\n - Allowed: Wheter the role is allowed to vote.\n\n*Optional parameters are:*\n - Multiplier: the multiplier assigned to that role.\n\nIf no roles are specified, @everyone is allowed to vote and the multiplier is set to 1.\n\nIf some role are specified, only specified roles with allowed set to "True" are allowed to vote. Unspecified roles will not be allowed to vote.'
                         },
                         {
-                            name: '/roles',
+                            name: '**/roles**',
                             value: 'Sends a message with all the preferences specified for every role in your server.'
                         },
                         {
-                            name: '/embed',
-                            value: 'Edit the poll embed\'s appearance - ONLY FOR PREMIUM USERS.\n\nRequired parameters are:\n - Name: The title of the embed.\n\nOptional parameters are:\n - Image: Embed\'s image URL\n - Color: Embed\'s color (can be its name like "Yellow" or its hex code like "#FFFF00")'
+                            name: '**/embed**',
+                            value: 'Edit the poll embed\'s appearance - ONLY FOR PREMIUM USERS.\n\n*Required parameters are:*\n - Name: The title of the embed.\n\n*Optional parameters are:*\n - Image: Embed\'s image URL\n - Color: Embed\'s color (can be its name like "Yellow" or its hex code like "#FFFF00")'
                         },
                         {
                             name: 'Support server:',
