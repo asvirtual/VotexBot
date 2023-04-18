@@ -44,7 +44,7 @@ const getPollExpirationMessage = poll => {
     const expiration = new Date(createdAt.getTime() + poll.expirationHours * 1000 * 60 * 60 + poll.expirationMinutes * 1000 * 60);
     return `Created: ${createdAt.getMonth()+1}/${createdAt.getDate()}/${createdAt.getFullYear()} - ${prettifyDate(createdAt.getHours())}:${prettifyDate(createdAt.getMinutes())} GMT\nExpires: ${expiration.getMonth()+1}/${expiration.getDate()}/${expiration.getFullYear()} - ${prettifyDate(expiration.getHours())}:${prettifyDate(expiration.getMinutes())} GMT`;
 };
-const getPollMessage = async poll => await (client.guilds.cache.get(poll.guildId).channels.cache.get(poll.channelId).messages).fetch(poll.messageId);
+const getPollMessage = async poll => await client.guilds.cache.get(poll.guildId).channels.cache.get(poll.channelId).messages.fetch(poll.messageId);
 const getPremiumMember = async id => premiumMembers = (await admin.database().ref(`premiumMembers/${id}`).get()).val();
 const addDays = (date, toAdd=1) => new Date(date.getTime() + (toAdd * DAY_IN_MILLIS));
 
@@ -262,7 +262,12 @@ const pollEndEmbed = async poll => {
         console.warn(`Error deleting message for poll ${JSON.stringify(poll)}: ${err}`);
     }
 
-    delete polls[String(poll.guildId)][String(poll.authorId)];
+    try {
+        delete polls[String(poll.guildId)][String(poll.authorId)];
+    } catch (err) {
+        console.warn(`Error removing poll from map ${JSON.stringify(poll)}: ${err}`);
+    }
+
     savePolls();
 }
 
@@ -346,6 +351,15 @@ client.on('interactionCreate', async interaction => {
                     walletAddress,
                     nftNumber: interaction.options.getString("number")
                 })));
+
+                premiumMembers[interaction.member.user.id] = { 
+                    ...interaction.member.user, 
+                    serverNickname: interaction.member.nickname, 
+                    server: interaction.guild, 
+                    code, 
+                    walletAddress,
+                    nftNumber: interaction.options.getString("number")
+                };
 
                 embed = {
                     color: Discord.Colors.Green,
@@ -453,6 +467,15 @@ client.on('interactionCreate', async interaction => {
                     if (expirationHours == undefined || expirationMinutes == undefined) {
                         expirationHours = 24;
                         expirationMinutes = 0;
+                    }
+
+                    if (expirationHours * 60 * 60 * 1000 + expirationMinutes * 60 * 1000 === Infinity) {
+                        embed = {
+                            color: Discord.Colors.Red,
+                            title: "The expiration date is too far from now",
+                        };
+                        await interaction.reply({ embeds: [embed], ephemeral: true });
+                        return;
                     }
     
                     poll = {
