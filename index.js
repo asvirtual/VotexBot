@@ -45,7 +45,8 @@ const getPollExpirationMessage = poll => {
     return `Created: ${createdAt.getMonth()+1}/${createdAt.getDate()}/${createdAt.getFullYear()} - ${prettifyDate(createdAt.getHours())}:${prettifyDate(createdAt.getMinutes())} GMT\nExpires: ${expiration.getMonth()+1}/${expiration.getDate()}/${expiration.getFullYear()} - ${prettifyDate(expiration.getHours())}:${prettifyDate(expiration.getMinutes())} GMT`;
 };
 const getPollMessage = async poll => await client.guilds.cache.get(poll.guildId).channels.cache.get(poll.channelId).messages.fetch(poll.messageId);
-const getPremiumMember = async id => premiumMembers = (await admin.database().ref(`premiumMembers/${id}`).get()).val();
+// const getPremiumMember = async id => premiumMembers = (await admin.database().ref(`premiumMembers/${id}`).get()).val();
+const getPremiumMember = id => Object.keys(premiumMembers).includes(id);
 const addDays = (date, toAdd=1) => new Date(date.getTime() + (toAdd * DAY_IN_MILLIS));
 
 const getEmbedColor = color => {
@@ -370,7 +371,7 @@ client.on('interactionCreate', async interaction => {
                 break;
         
             case "embed":
-                if (!(await getPremiumMember(interaction.member.user.id))) {
+                if (!Object.keys(premiumMembers).includes(interaction.user.id)) {
                     embed = {
                         color: Discord.Colors.Red,
                         title: "You need to be a premium user to access this feature",
