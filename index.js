@@ -696,12 +696,12 @@ client.on('interactionCreate', async interaction => {
                 color: poll.color ?? DEFAULT_EMBED_COLOR,
                 author: poll.embedAuthor,
                 title: "Active motion",
-                description: poll.question + getPollEmbedFields(poll),
+                description: poll.question + getPollEmbedFields(polls[interaction.guildId][id]),
                 footer: { text: `${poll.showDonation ? `Offer us a coffee: ${DONATION_ADDRESS}\n` : ""}${getPollExpirationMessage(poll)}`, },
                 // fields: getPollEmbedFields(poll)
             }
 
-            const message = await getPollMessage(poll);
+            const message = await getPollMessage(polls[interaction.guildId][id]);
             await message.edit({ embeds: [embed] });
             savePolls();
         } catch (err) { 
