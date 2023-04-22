@@ -669,7 +669,7 @@ client.on('interactionCreate', async interaction => {
     if (interaction.isSelectMenu()) {
         try {
             const id = interaction.customId.split("pollSelect")[1];
-            const poll = polls[interaction.guildId][id];
+            let poll = polls[interaction.guildId][id];
             const [highestPollRole, multiplier] = await getMemberHighestRole(poll, interaction.member);
 
             if (Object.keys(pollsRoles[interaction.guildId]?.[String(poll.authorId)] ?? []).length !== 0 && !highestPollRole) {
