@@ -44,7 +44,7 @@ const getPollExpirationMessage = poll => {
     const expiration = new Date(createdAt.getTime() + poll.expirationHours * 1000 * 60 * 60 + poll.expirationMinutes * 1000 * 60);
     return `Created: ${createdAt.getMonth()+1}/${createdAt.getDate()}/${createdAt.getFullYear()} - ${prettifyDate(createdAt.getHours())}:${prettifyDate(createdAt.getMinutes())} GMT\nExpires: ${expiration.getMonth()+1}/${expiration.getDate()}/${expiration.getFullYear()} - ${prettifyDate(expiration.getHours())}:${prettifyDate(expiration.getMinutes())} GMT`;
 };
-const getPollMessage = async poll => await client.guilds.cache.get(poll.guildId).channels.cache.get(poll.channelId).messages.fetch(poll.messageId);
+const getPollMessage = async poll => await ((await client.guilds.fetch(poll.guildId)).channels.fetch(poll.channelId)).messages.fetch(poll.messageId);
 // const getPremiumMember = async id => premiumMembers = (await admin.database().ref(`premiumMembers/${id}`).get()).val();
 const getPremiumMember = id => Object.keys(premiumMembers).includes(id);
 const addDays = (date, toAdd=1) => new Date(date.getTime() + (toAdd * DAY_IN_MILLIS));
@@ -177,7 +177,7 @@ const getEmbedColor = color => {
     }
 }
 
-const getMemberHighestRole = async (poll, member) => {
+const getMemberHighestRole = async (poll, member) => { 
     if (Object.keys(pollsRoles[member.guild.id]?.[String(poll.authorId)] ?? []).length === 0)
         return [await member.guild.roles.cache.find(role => role.name === "@everyone"), 1];
 
@@ -185,7 +185,7 @@ const getMemberHighestRole = async (poll, member) => {
     let multiplier = 1,
         highestPollRole;
 
-    for (const role of Array.from(member.roles.cache).sort(([, first], [, second]) => second.rawPosition - first.rawPosition)) {
+    for (const role of Array.from(await member.roles.fetch()).sort(([, first], [, second]) => second.rawPosition - first.rawPosition)) {
         if (Object.keys(roles).includes(String(role[0]))) {
             if (roles[role[0]].multiplier != undefined && roles[role[0]].allowed) {
                 highestPollRole = role[1];
@@ -689,7 +689,20 @@ client.on('interactionCreate', async interaction => {
                 timestamp: new Date().toISOString(),
             };
 
-            polls[interaction.guildId][id].votes[interaction.member.id] = { vote: interaction.values?.[0], multiplier, role: highestPollRole.id };
+            poll = { 
+                ...poll, 
+                votes: { 
+                    ...poll.votes, 
+                    [interaction.member.id]: { 
+                        vote: interaction.values?.[0], 
+                        multiplier, 
+                        role: highestPollRole.id 
+                    } 
+                } 
+            };
+            
+            polls[interaction.guildId][id].votes[interaction.member.id] = poll;
+            // polls[interaction.guildId][id].votes[interaction.member.id] = { vote: interaction.values?.[0], multiplier, role: highestPollRole.id };
             await interaction.reply({ embeds: [embed], ephemeral: true });
 
             embed = {
@@ -704,7 +717,7 @@ client.on('interactionCreate', async interaction => {
             const message = await getPollMessage(polls[interaction.guildId][id]);
             await message.edit({ embeds: [embed] });
             savePolls();
-        } catch (err) { 
+        } catch (err) {
             console.log(err)
         }
     }
