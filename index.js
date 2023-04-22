@@ -209,9 +209,10 @@ const getPollEmbedFields = (poll) => {
         else rolesVotes[vote][role].count += 1;
     });
     
-    poll.answers.forEach(answer => {
+    poll.answers.forEach(ans => {
+        const answer = ans.trim();
         if (rolesVotes[answer]) {
-            description += `\n\n***Option "${answer.trim()}***"\nVoters: ${Object.values(rolesVotes[answer] ?? []).reduce((totalCount, { count }) => totalCount + count, 0)}\nVotes (with multiplier): ${Object.values(rolesVotes[answer] ?? []).reduce((totalCount, { count, multiplier }) => totalCount + count * multiplier, 0)}\n`;
+            description += `\n\n***Option "${answer}***"\nVoters: ${Object.values(rolesVotes[answer] ?? []).reduce((totalCount, { count }) => totalCount + count, 0)}\nVotes (with multiplier): ${Object.values(rolesVotes[answer] ?? []).reduce((totalCount, { count, multiplier }) => totalCount + count * multiplier, 0)}\n`;
             Object.values(rolesVotes[answer] ?? []).filter(({ count }) => count > 0).forEach(({ role, count, multiplier }, idx) => {
                 description += `${count} <@&${role}> ${multiplier !== 1 ? "(x" + multiplier + ")" : ""}${idx !== (Object.values(rolesVotes[answer] ?? [])).length - 1 ? "\n" : ""}`;
             })
@@ -227,7 +228,7 @@ const pollEndEmbed = async poll => {
 
     let votes = Object.values(poll.answers).map(answer =>
         Object.values(poll.votes)
-            .filter(vote => vote.vote === answer)
+            .filter(vote => vote.vote === answer.trim())
                 .reduce((totalCount, currentVote) => totalCount + currentVote.multiplier, 0)
     );
 
@@ -689,20 +690,8 @@ client.on('interactionCreate', async interaction => {
                 timestamp: new Date().toISOString(),
             };
 
-            poll = { 
-                ...poll, 
-                votes: { 
-                    ...poll.votes, 
-                    [interaction.member.id]: { 
-                        vote: interaction.values?.[0], 
-                        multiplier, 
-                        role: highestPollRole.id 
-                    } 
-                } 
-            };
-            
-            polls[interaction.guildId][id].votes[interaction.member.id] = poll;
-            // polls[interaction.guildId][id].votes[interaction.member.id] = { vote: interaction.values?.[0], multiplier, role: highestPollRole.id };
+            // polls[interaction.guildId][id].votes[interaction.member.id] = poll;
+            polls[interaction.guildId][id].votes[interaction.member.id] = { vote: interaction.values?.[0], multiplier, role: highestPollRole.id };
             await interaction.reply({ embeds: [embed], ephemeral: true });
 
             embed = {
