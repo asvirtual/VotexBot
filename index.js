@@ -179,13 +179,13 @@ const getEmbedColor = color => {
 
 const getMemberHighestRole = async (poll, member) => { 
     if (Object.keys(pollsRoles[member.guild.id]?.[String(poll.authorId)] ?? []).length === 0)
-        return [await member.guild.roles.cache.find(role => role.name === "@everyone"), 1];
+        return [member.guild.roles.cache.find(role => role.name === "@everyone"), 1];
 
     const roles = pollsRoles[member.guild.id][String(poll.authorId)];
     let multiplier = 1,
         highestPollRole;
 
-    for (const role of Array.from(await member.roles.fetch()).sort(([, first], [, second]) => second.rawPosition - first.rawPosition)) {
+    for (const role of Array.from(member.roles.cache).sort(([, first], [, second]) => second.rawPosition - first.rawPosition)) {
         if (Object.keys(roles).includes(String(role[0]))) {
             if (roles[role[0]].multiplier != undefined && roles[role[0]].allowed) {
                 highestPollRole = role[1];
