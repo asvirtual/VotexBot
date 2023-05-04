@@ -444,7 +444,7 @@ client.on('interactionCreate', async interaction => {
                         usersPolls[String(interaction.guildId)]?.[String(interaction.member.id)] ? usersPolls[interaction.guildId][interaction.member.id]
                             .filter(poll => (new Date()).getTime() - new Date(poll.createdAt).getTime() <= (new Date()).getTime() - firstWeekDate.getTime()) : [];
                     
-                    if (userPolls.length >= FREE_VERSION_WEEKLY_POLLS_LIMIT) {
+                    if (userPolls.length >= FREE_VERSION_WEEKLY_POLLS_LIMIT && !Object.keys(premiumMembers).includes(interaction.member.id)) {
                         embed = {
                             color: DEFAULT_EMBED_COLOR,
                             title: "You have reached the free version limit for polls this week!",
