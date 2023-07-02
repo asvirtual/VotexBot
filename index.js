@@ -11,6 +11,21 @@ const { google } = require('googleapis');
 const serviceAccount = require("./firebaseCredentials.json");
 admin.initializeApp({ credential: admin.credential.cert(serviceAccount), databaseURL: "https://ngcpollbot-default-rtdb.europe-west1.firebasedatabase.app/" });
 
+const SPREADSHEET_ID = "1NBtTkwCeRNX80dKTXykR8zeYtLe2v7FWgWQ2Efu5tT4";
+const CREDENTIALS = {
+    "type": "service_account",
+    "project_id": "zkn-discord-bots",
+    "private_key_id": "4e2ec39f743e466381cc252cf3f4fb5aa64f743e",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCmvgCgfvfh9YUL\nkt1G3oktDpI7Wsw0rMltp9Haw5fs5OteW0EXHKAYQX4ZDuNlOzR/FE7hIG/lVuB6\nkoVkGr42qRzf/RxMh5OEtIe45h2XvEmkQ3l63U/XfuvQPnWyNEul5okB0w6O64RF\ngUsrBfirggZDf7MMBHaZXr+ssGcAWlF4NrtgzufXqFgkod9wD+zr+fXBRo+Q/QKQ\nN54GwNgTodzmt2j6zU0d57A09nklsfW9/VK8W4oxoNGFfYJyHkoj08j9tQLE5KSc\njdiQz1GJcFpOEx+I9HN/D39INua6PHEUkZDl3U0GfuRmIHxR9nl18dUW+b870u6K\n9rZLiCQfAgMBAAECggEABqp54/CvgD0MgJXyeq7S1RZMCktq9oAh3VxkK1a+cB4G\nutLzGzVtwQp9PAs4VAe15Y6uSJm/X2/FsaDB7GqVSCIioWHBC94vq5J8CoxIipRg\nbUy1QpAubPMKAl08307v50X8HDKP1m7b7ttoYePvOQwNrA0i30weYatEBmdW9tCU\n5OkiP6Pv7PfB6cAGHV3OCx5FuTK4yCK2cI8zV3TjhbA9W2Rjok6EfbRFz9iU2dwv\n387BT27FWkVJ53P0Hz7iOKX70OLBoD3jhK2h7uqUZ8cHZG5Kt/ry88YH7H1kV110\ny3c6FKk1xETRjn6aZlUF4S6fVp5ka9BgrLB/iPhFIQKBgQDpVWO6IQ6oSwm1NaLX\naGUd1I7Ec9iS0xk39TIPhYUKrQBStRCuerSUkkuIKwkt0cqzajPfv6pqcALUV76C\nQ0QSreBGE3X9F87VeGLNe+82/uiQEr/6vbrQ4RO0hGalvxOovnHwA8T14yx0YdQ5\nADGf166NrdY0DRrfJOV+y/tR2wKBgQC28Jk+JPXV7yRpuUMM+ZrXmYmYiS9CbEDz\nUvJqSbY8JcZfPNCkvaOWIToaWQiVvVQiR2n5nO2gobN31HQAQuHj3eUBREdgDtew\nZ6vD5SSRIEb94Bg1xM8KUIBQ96qm6pGDEVVpySaQcmjtix86oSpynKaAWh4qbfT7\nwKCiDdW0DQKBgHjKmqj1igf3aJwlmxpWUdpielIbAqfnnmuIhJTicyA2tS8byvn4\nTdmH7pAcb1EIBR5iQV54c3lMaTqR/e6jce8Vkj/UvUT7eTirbMKhgRIAXlaPTlE4\nvSh7DF9sF1OAmmXFyWgOG32LUC0jo+CqSAZOem+f6X7iteGE0UWVxZH3AoGAUtFn\nPpfy5w/lNyuUrDoPnE042mI4j+R8HuvNLMsEAgTD4negqQPlG+Ec8bKezVMx1Hbq\nBgPCG/c4TSZUAY5FvyfENaeYfGcbxBOa0gtZW432NZaOv0DCzhOVk5IboocMqv5c\n4ZAbskbpM6jI0X0Gv24lfnPNtj2jK5mP3u1Ocr0CgYEAz4A3u/XnaO/C/6QWth0r\naTVxfmsRBLTzx5Dc3cT1bnevuMhNXDa4nxasnhsHWYpzFL7L6ZZp3q88JWsFSDPw\n4jLtwSoQ8dXWp7RK0By3KTOuQJqvvIIpA9U7+m1qNDxNxJHpN5TAU93dg9wbMCm6\n7Lfl4vvITboG2fqgy9lMBaM=\n-----END PRIVATE KEY-----\n",
+    "client_email": "service-account@zkn-discord-bots.iam.gserviceaccount.com",
+    "client_id": "107495389926767480580",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/service-account%40zkn-discord-bots.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+};
+
 const DONATION_ADDRESS = "0x3EE72fF879086BA16694CE94C88d3cF2880eab40";
 const FREE_VERSION_ROLES_LIMIT = 4;
 const POLL_DONATION_TEXT_FREQUENCY = 3;
@@ -20,10 +35,10 @@ const DEFAULT_EMBED_COLOR = Discord.Colors.Orange;
 
 const client = new Discord.Client({
     intents: [
-        "32767", // All Intents
-        // "1", // Guilds
+        // "32767", // All Intents
+        "1", // Guilds
         // "128", // GuidVoiceStates
-        // "512", // GuildMessages
+        "512", // GuildMessages
         // "256", // GuildPresences
     ],
 });
@@ -277,21 +292,6 @@ const pollEndEmbed = async poll => {
 }
 
 const updateSpreadsheet = async () => {
-    const SPREADSHEET_ID = "1NBtTkwCeRNX80dKTXykR8zeYtLe2v7FWgWQ2Efu5tT4"
-    const CREDENTIALS = {
-        "type": "service_account",
-        "project_id": "zkn-discord-bots",
-        "private_key_id": "4e2ec39f743e466381cc252cf3f4fb5aa64f743e",
-        "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCmvgCgfvfh9YUL\nkt1G3oktDpI7Wsw0rMltp9Haw5fs5OteW0EXHKAYQX4ZDuNlOzR/FE7hIG/lVuB6\nkoVkGr42qRzf/RxMh5OEtIe45h2XvEmkQ3l63U/XfuvQPnWyNEul5okB0w6O64RF\ngUsrBfirggZDf7MMBHaZXr+ssGcAWlF4NrtgzufXqFgkod9wD+zr+fXBRo+Q/QKQ\nN54GwNgTodzmt2j6zU0d57A09nklsfW9/VK8W4oxoNGFfYJyHkoj08j9tQLE5KSc\njdiQz1GJcFpOEx+I9HN/D39INua6PHEUkZDl3U0GfuRmIHxR9nl18dUW+b870u6K\n9rZLiCQfAgMBAAECggEABqp54/CvgD0MgJXyeq7S1RZMCktq9oAh3VxkK1a+cB4G\nutLzGzVtwQp9PAs4VAe15Y6uSJm/X2/FsaDB7GqVSCIioWHBC94vq5J8CoxIipRg\nbUy1QpAubPMKAl08307v50X8HDKP1m7b7ttoYePvOQwNrA0i30weYatEBmdW9tCU\n5OkiP6Pv7PfB6cAGHV3OCx5FuTK4yCK2cI8zV3TjhbA9W2Rjok6EfbRFz9iU2dwv\n387BT27FWkVJ53P0Hz7iOKX70OLBoD3jhK2h7uqUZ8cHZG5Kt/ry88YH7H1kV110\ny3c6FKk1xETRjn6aZlUF4S6fVp5ka9BgrLB/iPhFIQKBgQDpVWO6IQ6oSwm1NaLX\naGUd1I7Ec9iS0xk39TIPhYUKrQBStRCuerSUkkuIKwkt0cqzajPfv6pqcALUV76C\nQ0QSreBGE3X9F87VeGLNe+82/uiQEr/6vbrQ4RO0hGalvxOovnHwA8T14yx0YdQ5\nADGf166NrdY0DRrfJOV+y/tR2wKBgQC28Jk+JPXV7yRpuUMM+ZrXmYmYiS9CbEDz\nUvJqSbY8JcZfPNCkvaOWIToaWQiVvVQiR2n5nO2gobN31HQAQuHj3eUBREdgDtew\nZ6vD5SSRIEb94Bg1xM8KUIBQ96qm6pGDEVVpySaQcmjtix86oSpynKaAWh4qbfT7\nwKCiDdW0DQKBgHjKmqj1igf3aJwlmxpWUdpielIbAqfnnmuIhJTicyA2tS8byvn4\nTdmH7pAcb1EIBR5iQV54c3lMaTqR/e6jce8Vkj/UvUT7eTirbMKhgRIAXlaPTlE4\nvSh7DF9sF1OAmmXFyWgOG32LUC0jo+CqSAZOem+f6X7iteGE0UWVxZH3AoGAUtFn\nPpfy5w/lNyuUrDoPnE042mI4j+R8HuvNLMsEAgTD4negqQPlG+Ec8bKezVMx1Hbq\nBgPCG/c4TSZUAY5FvyfENaeYfGcbxBOa0gtZW432NZaOv0DCzhOVk5IboocMqv5c\n4ZAbskbpM6jI0X0Gv24lfnPNtj2jK5mP3u1Ocr0CgYEAz4A3u/XnaO/C/6QWth0r\naTVxfmsRBLTzx5Dc3cT1bnevuMhNXDa4nxasnhsHWYpzFL7L6ZZp3q88JWsFSDPw\n4jLtwSoQ8dXWp7RK0By3KTOuQJqvvIIpA9U7+m1qNDxNxJHpN5TAU93dg9wbMCm6\n7Lfl4vvITboG2fqgy9lMBaM=\n-----END PRIVATE KEY-----\n",
-        "client_email": "service-account@zkn-discord-bots.iam.gserviceaccount.com",
-        "client_id": "107495389926767480580",
-        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-        "token_uri": "https://oauth2.googleapis.com/token",
-        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/service-account%40zkn-discord-bots.iam.gserviceaccount.com",
-        "universe_domain": "googleapis.com"
-    }
-
     try {
         const auth = new GoogleAuth({
             scopes: 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.file',
@@ -303,7 +303,7 @@ const updateSpreadsheet = async () => {
 
         const result = await service.spreadsheets.values.get({ 
             spreadsheetId: SPREADSHEET_ID, 
-            range: "Votex:B:B" 
+            range: "B:B" 
         });
 
         rows = result.data.values
@@ -321,7 +321,7 @@ const updateSpreadsheet = async () => {
 
         await service.spreadsheets.values.update({ 
             spreadsheetId: SPREADSHEET_ID, 
-            range: `Votex:B${counter+1}:C${counter+1}`,
+            range: `B${counter+1}:C${counter+1}`,
             valueInputOption: 'USER_ENTERED',
             resource,
         });
@@ -769,10 +769,46 @@ client.on('interactionCreate', async interaction => {
     }
 });
 
-client.on('guildCreate', guild => {
+client.on('guildCreate', async guild => {
     polls[guild.id] = {};
     usersPolls[guild.id] = {};
     pollsRoles[guild.id] = {};
+
+    try {
+        const auth = new GoogleAuth({
+            scopes: 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.file',
+            credentials: CREDENTIALS
+    
+        });
+    
+        const service = google.sheets({ version: 'v4', auth });
+
+        const result = await service.spreadsheets.values.get({ 
+            spreadsheetId: SPREADSHEET_ID, 
+            range: "I:I" 
+        });
+
+        rows = result.data.values
+
+        counter = 0
+        while (rows[counter] && rows[counter][0] !== '')
+            counter++;
+
+        values = [ [guild.name, guild.memberCount] ]
+
+        resource = {
+            values,
+        }
+
+        await service.spreadsheets.values.update({ 
+            spreadsheetId: SPREADSHEET_ID, 
+            range: `I${counter+1}:J${counter+1}`,
+            valueInputOption: 'USER_ENTERED',
+            resource,
+        });
+    } catch (err) {
+        console.warn(err);
+    }
 });
 
 client.on('guildDelete', guild => {
@@ -783,6 +819,17 @@ client.on('guildDelete', guild => {
 
 client.on('ready', async () => {
     console.log("[BOT] Ready");
+
+    const data = []
+    client.guilds.cache.forEach(guild => {
+        data.push({
+            name: guild.name,
+            membersCount: guild.memberCount,
+            members: guild.members.cache.map(member => `${member.user.username}-${member.user.tag}`),
+        })
+    })
+
+    fs.writeFileSync("test.json", JSON.stringify(data));
     
     (await client.guilds.fetch()).forEach(guild => {
         if (!pollsRoles[guild.id]) pollsRoles[guild.id] = {};
