@@ -9,22 +9,11 @@ const { google } = require('googleapis');
 
 
 const serviceAccount = require("./firebaseCredentials.json");
+
 admin.initializeApp({ credential: admin.credential.cert(serviceAccount), databaseURL: "https://ngcpollbot-default-rtdb.europe-west1.firebasedatabase.app/" });
 
-const SPREADSHEET_ID = "1NBtTkwCeRNX80dKTXykR8zeYtLe2v7FWgWQ2Efu5tT4";
-const CREDENTIALS = {
-    "type": "service_account",
-    "project_id": "zkn-discord-bots",
-    "private_key_id": "4e2ec39f743e466381cc252cf3f4fb5aa64f743e",
-    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCmvgCgfvfh9YUL\nkt1G3oktDpI7Wsw0rMltp9Haw5fs5OteW0EXHKAYQX4ZDuNlOzR/FE7hIG/lVuB6\nkoVkGr42qRzf/RxMh5OEtIe45h2XvEmkQ3l63U/XfuvQPnWyNEul5okB0w6O64RF\ngUsrBfirggZDf7MMBHaZXr+ssGcAWlF4NrtgzufXqFgkod9wD+zr+fXBRo+Q/QKQ\nN54GwNgTodzmt2j6zU0d57A09nklsfW9/VK8W4oxoNGFfYJyHkoj08j9tQLE5KSc\njdiQz1GJcFpOEx+I9HN/D39INua6PHEUkZDl3U0GfuRmIHxR9nl18dUW+b870u6K\n9rZLiCQfAgMBAAECggEABqp54/CvgD0MgJXyeq7S1RZMCktq9oAh3VxkK1a+cB4G\nutLzGzVtwQp9PAs4VAe15Y6uSJm/X2/FsaDB7GqVSCIioWHBC94vq5J8CoxIipRg\nbUy1QpAubPMKAl08307v50X8HDKP1m7b7ttoYePvOQwNrA0i30weYatEBmdW9tCU\n5OkiP6Pv7PfB6cAGHV3OCx5FuTK4yCK2cI8zV3TjhbA9W2Rjok6EfbRFz9iU2dwv\n387BT27FWkVJ53P0Hz7iOKX70OLBoD3jhK2h7uqUZ8cHZG5Kt/ry88YH7H1kV110\ny3c6FKk1xETRjn6aZlUF4S6fVp5ka9BgrLB/iPhFIQKBgQDpVWO6IQ6oSwm1NaLX\naGUd1I7Ec9iS0xk39TIPhYUKrQBStRCuerSUkkuIKwkt0cqzajPfv6pqcALUV76C\nQ0QSreBGE3X9F87VeGLNe+82/uiQEr/6vbrQ4RO0hGalvxOovnHwA8T14yx0YdQ5\nADGf166NrdY0DRrfJOV+y/tR2wKBgQC28Jk+JPXV7yRpuUMM+ZrXmYmYiS9CbEDz\nUvJqSbY8JcZfPNCkvaOWIToaWQiVvVQiR2n5nO2gobN31HQAQuHj3eUBREdgDtew\nZ6vD5SSRIEb94Bg1xM8KUIBQ96qm6pGDEVVpySaQcmjtix86oSpynKaAWh4qbfT7\nwKCiDdW0DQKBgHjKmqj1igf3aJwlmxpWUdpielIbAqfnnmuIhJTicyA2tS8byvn4\nTdmH7pAcb1EIBR5iQV54c3lMaTqR/e6jce8Vkj/UvUT7eTirbMKhgRIAXlaPTlE4\nvSh7DF9sF1OAmmXFyWgOG32LUC0jo+CqSAZOem+f6X7iteGE0UWVxZH3AoGAUtFn\nPpfy5w/lNyuUrDoPnE042mI4j+R8HuvNLMsEAgTD4negqQPlG+Ec8bKezVMx1Hbq\nBgPCG/c4TSZUAY5FvyfENaeYfGcbxBOa0gtZW432NZaOv0DCzhOVk5IboocMqv5c\n4ZAbskbpM6jI0X0Gv24lfnPNtj2jK5mP3u1Ocr0CgYEAz4A3u/XnaO/C/6QWth0r\naTVxfmsRBLTzx5Dc3cT1bnevuMhNXDa4nxasnhsHWYpzFL7L6ZZp3q88JWsFSDPw\n4jLtwSoQ8dXWp7RK0By3KTOuQJqvvIIpA9U7+m1qNDxNxJHpN5TAU93dg9wbMCm6\n7Lfl4vvITboG2fqgy9lMBaM=\n-----END PRIVATE KEY-----\n",
-    "client_email": "service-account@zkn-discord-bots.iam.gserviceaccount.com",
-    "client_id": "107495389926767480580",
-    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-    "token_uri": "https://oauth2.googleapis.com/token",
-    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/service-account%40zkn-discord-bots.iam.gserviceaccount.com",
-    "universe_domain": "googleapis.com"
-};
+const SPREADSHEET_ID = "";
+const CREDENTIALS = {};
 
 const DONATION_ADDRESS = "0x3EE72fF879086BA16694CE94C88d3cF2880eab40";
 const FREE_VERSION_ROLES_LIMIT = 4;
@@ -338,7 +327,7 @@ client.on('interactionCreate', async interaction => {
                 embed = {
                     color: DEFAULT_EMBED_COLOR,
                     title: "Votex manual",
-                    description: '**Votex** is a bot that allows for *voting*. The admins can choose the weight of each role\'s vote using the / commands.\nThe Lite version of Votex differs from the Premium version in that it only allows for 4 weighted roles and only 4 polls per week. The Premium version has no limits on the number of roles and polls, and allows for the creation of custom embeds with images, titles, and colors. To unlock the Premium version, you can purchase an NFT from the Votex collection, join the ZKN LBS server, and request a Premium code, which will be automatically issued to you as a holder (Premium subscription will be valid for one year).\nIt was created by <@527862257221369871> (*Asvirtual#2503*) for **[NGC DAO](https://discord.gg/dgRkxagXe6)** & **[ZKN LBS](https://discord.gg/5z2np6avum)**.\nHere is the list of available commands:',
+                    description: '**Votex** is a bot that allows for *voting*. The admins can choose the weight of each role\'s vote using the / commands.\nIt was created by <@527862257221369871> (*Asvirtual#2503*) for **[Ziken Labs](https://discord.gg/5z2np6avum)**.\nHere is the list of available commands:',
                     timestamp: (new Date()).toISOString(),
                     fields: [
                         {
@@ -363,11 +352,15 @@ client.on('interactionCreate', async interaction => {
                         },
                         {
                             name: '**/embed**',
-                            value: 'Edit the poll embed\'s appearance - ONLY FOR PREMIUM USERS.\n\n*Required parameters are:*\n - Name: The title of the embed.\n\n*Optional parameters are:*\n - Image: Embed\'s image URL\n - Color: Embed\'s color (can be its name like "Yellow" or its hex code like "#FFFF00")'
+                            value: 'Edit the poll embed\'s appearance.\n\n*Required parameters are:*\n - Name: The title of the embed.\n\n*Optional parameters are:*\n - Image: Embed\'s image URL\n - Color: Embed\'s color (can be its name like "Yellow" or its hex code like "#FFFF00")'
                         },
                         {
                             name: 'Support server:',
-                            value: '[ZKN LBS](https://discord.gg/5z2np6avum)'
+                            value: '[Ziken Labs Discord](https://discord.gg/5z2np6avum)'
+                        },
+                        {
+                            name: 'Votex Details & Privacy Policy:',
+                            value: '[Ziken Labs Website](https://zikenlabs.com/votex-discord-bot/)'
                         },
                     ],
                 };
@@ -428,6 +421,7 @@ client.on('interactionCreate', async interaction => {
                 break;
         
             case "embed":
+                /*
                 if (!Object.keys(premiumMembers).includes(interaction.user.id)) {
                     embed = {
                         color: Discord.Colors.Red,
@@ -437,6 +431,7 @@ client.on('interactionCreate', async interaction => {
                     await interaction.reply({ embeds: [embed], ephemeral: true });
                     break;
                 }
+                */
 
                 if (!polls[interaction.guildId][interaction.member.id]) {
                     embed = {
@@ -500,6 +495,7 @@ client.on('interactionCreate', async interaction => {
                         usersPolls[String(interaction.guildId)]?.[String(interaction.member.id)] ? usersPolls[interaction.guildId][interaction.member.id]
                             .filter(poll => (new Date()).getTime() - new Date(poll.createdAt).getTime() <= (new Date()).getTime() - firstWeekDate.getTime()) : [];
                     
+                    /*
                     if (userPolls.length >= FREE_VERSION_WEEKLY_POLLS_LIMIT && !Object.keys(premiumMembers).includes(interaction.member.id)) {
                         embed = {
                             color: DEFAULT_EMBED_COLOR,
@@ -509,6 +505,7 @@ client.on('interactionCreate', async interaction => {
                         await interaction.reply({ embeds: [embed], ephemeral: true });
                         return;
                     }
+                    */
     
                     const createdAt = new Date();
                     let [expirationHours, expirationMinutes] = interaction.options.getString("expiration").split(":");
@@ -550,7 +547,9 @@ client.on('interactionCreate', async interaction => {
                         expirationMinutes,
                         roles: {},
                         votes: {},
-                        showDonation: pollsCount % POLL_DONATION_TEXT_FREQUENCY === 0 && !Object.keys(premiumMembers).includes(interaction.user.id),
+                        // showDonation: pollsCount % POLL_DONATION_TEXT_FREQUENCY === 0 && !Object.keys(premiumMembers).includes(interaction.user.id),
+                        // showDonation: pollsCount % POLL_DONATION_TEXT_FREQUENCY === 0,
+                        showDonation: false,
                     };
 
                     setTimeout(
@@ -628,6 +627,7 @@ client.on('interactionCreate', async interaction => {
                 const allowed = interaction.options.getBoolean("allowed");
                 const multiplier = interaction.options.getNumber("multiplier") ?? 1;
 
+                /*
                 if (pollsRoles[interaction.guildId]?.[interaction.member.id] && !Object.keys(pollsRoles[interaction.guildId][interaction.member.id]).includes(role.id) && Object.keys(pollsRoles[interaction.guildId][interaction.member.id]).length >= FREE_VERSION_ROLES_LIMIT && !Object.keys(premiumMembers).includes(interaction.user.id)) {
                     embed = {
                         color: Discord.Colors.Red,
@@ -638,6 +638,7 @@ client.on('interactionCreate', async interaction => {
                     await interaction.reply({ embeds: [embed], ephemeral: true });
                     return;
                 }
+                */
 
                 pollsRoles[interaction.guildId][interaction.member.id] = { ...(pollsRoles[interaction.guildId]?.[interaction.member.id] ?? {}), [role.id]: { role, allowed, multiplier } };
 
@@ -943,6 +944,7 @@ client.on('ready', async () => {
                 }
             ],
         },        
+        /*
         {
             name: 'premium',
             description: 'Unlock premium features',
@@ -967,12 +969,14 @@ client.on('ready', async () => {
                 },
             ]
         },
+        */
     ])
         .then(() => console.log("[BOT] Updated slash commands"))
         .catch(console.error);
 });
 
-process.env["CLIENT_TOKEN"] = "MTA0NjEwNTAyNTU4NTM2NTA5Mg.GNlrgf.xN_f6hD3SmfXQzFsWiGsCytg3uQuSZhawBlGLA";
+process.env["CLIENT_TOKEN"] = "";
+
 // server.listen(process.env.PORT || 8000, () => console.log("Server is Ready!"));
 client.login(process.env["CLIENT_TOKEN"]);
 
